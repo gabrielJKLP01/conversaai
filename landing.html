@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConversaAI — Copiloto de Conversas com IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,700;1,900&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf8f4;--dark:#0f0e0c;--accent:#e8552a;--accent2:#f7c948;
+  --green:#16a34a;--text:#1a1916;--text2:#5a5750;--surface:#f0ece4;
+  --border:#e2ddd4;--white:#ffffff;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+.urgency-bar{background:var(--accent);color:white;text-align:center;padding:10px 16px;font-size:14px;font-weight:700;position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.urgency-bar span{background:rgba(0,0,0,0.2);padding:3px 10px;border-radius:100px;font-weight:800;font-size:13px}
+#countdown{font-family:'Fraunces',serif;font-size:18px;font-weight:900;background:var(--accent2);color:var(--dark);padding:4px 12px;border-radius:8px;letter-spacing:1px}
+nav{background:rgba(250,248,244,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:44px;z-index:100}
+.nav-logo{font-family:'Fraunces',serif;font-weight:900;font-size:22px;color:var(--dark)}
+.nav-logo span{color:var(--accent)}
+.nav-cta{background:var(--accent);color:white;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:800;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,85,42,0.4)}50%{box-shadow:0 0 0 8px rgba(232,85,42,0)}}
+.nav-cta:hover{background:#c94420;transform:translateY(-1px)}
+.hero{padding:80px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 90% 60% at 50% -10%,rgba(232,85,42,0.1),transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#fff3f0;border:1.5px solid #fca894;border-radius:100px;padding:7px 18px;font-size:13px;font-weight:800;color:var(--accent);margin-bottom:28px;animation:fadeUp 0.5s ease both}
+.hero-badge::before{content:'🔥'}
+h1{font-family:'Fraunces',serif;font-size:clamp(40px,7vw,82px);font-weight:900;line-height:1.05;letter-spacing:-2px;max-width:860px;margin:0 auto 20px;animation:fadeUp 0.5s ease 0.1s both}
+h1 em{font-style:italic;color:var(--accent)}
+h1 u{text-decoration-color:var(--accent2);text-decoration-thickness:4px}
+.hero-sub{font-size:clamp(17px,2.2vw,21px);color:var(--text2);max-width:580px;margin:0 auto 36px;line-height:1.75;animation:fadeUp 0.5s ease 0.2s both}
+.hero-sub strong{color:var(--text);font-weight:800}
+.offer-box{background:var(--dark);color:white;border-radius:24px;padding:36px 32px;max-width:640px;margin:0 auto 40px;animation:fadeUp 0.5s ease 0.3s both;position:relative;overflow:hidden}
+.offer-box::before{content:'OFERTA ESPECIAL';position:absolute;top:16px;right:-28px;background:var(--accent2);color:var(--dark);font-size:11px;font-weight:900;padding:4px 48px;transform:rotate(12deg);letter-spacing:1px}
+.offer-original{font-size:15px;color:rgba(255,255,255,0.5);text-decoration:line-through;margin-bottom:4px}
+.offer-price{font-family:'Fraunces',serif;font-size:64px;font-weight:900;line-height:1;color:var(--accent2);margin-bottom:4px}
+.offer-price sup{font-size:28px;vertical-align:top;margin-top:12px;display:inline-block}
+.offer-period{font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:20px}
+.offer-items{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;text-align:left}
+.offer-item{display:flex;align-items:center;gap:10px;font-size:15px}
+.offer-item::before{content:'✓';color:var(--accent2);font-weight:900;font-size:16px;flex-shrink:0}
+.offer-guarantee{font-size:13px;color:rgba(255,255,255,0.5);margin-top:12px}
+.offer-spots{background:rgba(232,85,42,0.2);border:1px solid rgba(232,85,42,0.4);border-radius:8px;padding:8px 14px;font-size:13px;color:#fca894;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.spot-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.btn-hero{display:block;width:100%;padding:18px;background:var(--accent);color:white;border:none;border-radius:14px;font-size:18px;font-weight:900;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;transition:all 0.2s;text-decoration:none;text-align:center;margin-bottom:10px}
+.btn-hero:hover{background:#c94420;transform:translateY(-2px);box-shadow:0 16px 40px rgba(232,85,42,0.4)}
+.btn-free{display:block;width:100%;padding:14px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;transition:all 0.2s;text-decoration:none;text-align:center}
+.btn-free:hover{background:rgba(255,255,255,0.1);color:white}
+.proof-bar{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;padding:20px 24px;border-bottom:1px solid var(--border);font-size:14px;color:var(--text2)}
+.proof-item{display:flex;align-items:center;gap:6px;font-weight:700}
+.proof-item span{color:var(--text)}
+.avatars{display:flex}
+.av{width:28px;height:28px;border-radius:50%;border:2px solid white;margin-left:-6px;font-size:11px;font-weight:800;color:white;display:flex;align-items:center;justify-content:center}
+.av:first-child{margin-left:0}
+.section{padding:80px 24px}
+.section-inner{max-width:960px;margin:0 auto}
+.section-label{font-size:12px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(30px,5vw,52px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
+.section-sub{font-size:17px;color:var(--text2);line-height:1.8;max-width:560px}
+.problem-bg{background:var(--dark);color:white}
+.problem-bg .section-sub{color:rgba(255,255,255,0.6)}
+.pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:40px}
+.pain-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px}
+.pain-icon{font-size:28px;margin-bottom:12px}
+.pain-title{font-weight:800;font-size:16px;margin-bottom:6px}
+.pain-text{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.65}
+.before-after{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.ba-card{border-radius:16px;padding:24px}
+.ba-card.before{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2)}
+.ba-card.after{background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2)}
+.ba-label{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+.ba-card.before .ba-label{color:#f87171}
+.ba-card.after .ba-label{color:#4ade80}
+.ba-item{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:6px;display:flex;align-items:flex-start;gap:8px}
+.ba-card.before .ba-item::before{content:'✗';color:#f87171;font-weight:900;flex-shrink:0}
+.ba-card.after .ba-item::before{content:'✓';color:#4ade80;font-weight:900;flex-shrink:0}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:48px}
+.feat-card{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:28px;transition:all 0.25s;position:relative;overflow:hidden}
+.feat-card:hover{transform:translateY(-6px);box-shadow:0 24px 56px rgba(0,0,0,0.1);border-color:var(--accent)}
+.feat-card.hero-card{background:var(--dark);color:white;border-color:var(--dark)}
+.feat-card.hero-card .feat-desc{color:rgba(255,255,255,0.6)}
+.feat-emoji{font-size:36px;margin-bottom:16px}
+.feat-title{font-weight:900;font-size:18px;margin-bottom:8px}
+.feat-desc{font-size:14px;color:var(--text2);line-height:1.7}
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:48px}
+.test-card{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:28px}
+.stars{color:#f59e0b;font-size:17px;letter-spacing:2px;margin-bottom:14px}
+.test-text{font-family:'Fraunces',serif;font-size:17px;font-style:italic;line-height:1.65;margin-bottom:20px;color:var(--dark)}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;font-size:16px;flex-shrink:0}
+.test-name{font-weight:800;font-size:15px}
+.test-role{font-size:12px;color:var(--text2)}
+.test-result{margin-top:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 12px;font-size:13px;color:var(--green);font-weight:700}
+.pricing-bg{background:var(--dark);color:white}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:48px}
+.plan{background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:22px;padding:32px;position:relative;transition:all 0.2s}
+.plan:hover{border-color:rgba(255,255,255,0.25)}
+.plan.popular{background:var(--accent);border-color:var(--accent);transform:scale(1.02)}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent2);color:var(--dark);padding:5px 18px;border-radius:100px;font-size:12px;font-weight:900;white-space:nowrap}
+.plan-name{font-size:14px;font-weight:800;opacity:0.6;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.plan.popular .plan-name{opacity:1;color:rgba(255,255,255,0.8)}
+.plan-price{font-family:'Fraunces',serif;font-size:58px;font-weight:900;line-height:1;margin-bottom:2px}
+.plan-price sup{font-size:24px;vertical-align:top;margin-top:10px;display:inline-block}
+.plan-from{font-size:13px;opacity:0.5;text-decoration:line-through;margin-bottom:4px}
+.plan-period{font-size:14px;opacity:0.55;margin-bottom:24px}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:28px}
+.plan-feats li{font-size:14px;display:flex;align-items:flex-start;gap:9px;opacity:0.85;line-height:1.5}
+.plan-feats li::before{content:'✓';font-weight:900;color:var(--accent2);flex-shrink:0;margin-top:1px}
+.plan.popular .plan-feats li::before{color:white}
+.plan-btn{width:100%;padding:15px;border-radius:100px;font-weight:900;font-size:15px;cursor:pointer;transition:all 0.2s;font-family:'Cabinet Grotesk',sans-serif;border:none;letter-spacing:0.3px}
+.plan-btn.outline{background:rgba(255,255,255,0.08);color:white}
+.plan-btn.outline:hover{background:rgba(255,255,255,0.16)}
+.plan-btn.solid{background:var(--dark);color:white}
+.plan-btn.solid:hover{background:#1e1c19;box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.guarantee{margin-top:48px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:28px;text-align:center;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center}
+.guarantee-icon{font-size:48px}
+.guarantee-text h3{font-weight:900;font-size:20px;margin-bottom:6px}
+.guarantee-text p{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7}
+.cta-mid{background:var(--accent2);padding:60px 24px;text-align:center}
+.cta-mid h2{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,46px);font-weight:900;color:var(--dark);line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
+.cta-mid p{font-size:17px;color:rgba(0,0,0,0.6);margin-bottom:28px}
+.btn-dark{display:inline-block;background:var(--dark);color:white;padding:16px 36px;border-radius:100px;font-size:16px;font-weight:900;text-decoration:none;transition:all 0.2s;font-family:'Cabinet Grotesk',sans-serif}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,0.25)}
+.faq-list{margin-top:40px;display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--border);padding:22px 0;cursor:pointer;user-select:none}
+.faq-q{font-weight:800;font-size:17px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-icon{font-size:22px;color:var(--accent);flex-shrink:0;transition:transform 0.2s;font-weight:400}
+.faq-a{font-size:15px;color:var(--text2);line-height:1.8;margin-top:14px;display:none}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-item.open .faq-a{display:block}
+.cta-final{background:var(--dark);color:white;padding:100px 24px;text-align:center}
+.cta-final h2{font-family:'Fraunces',serif;font-size:clamp(36px,6vw,72px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:20px}
+.cta-final h2 em{color:var(--accent2);font-style:italic}
+.cta-final p{font-size:19px;color:rgba(255,255,255,0.6);max-width:500px;margin:0 auto 36px;line-height:1.75}
+.btn-big{display:inline-block;background:var(--accent);color:white;padding:20px 48px;border-radius:100px;font-size:19px;font-weight:900;text-decoration:none;transition:all 0.2s;font-family:'Cabinet Grotesk',sans-serif;border:none;cursor:pointer}
+.btn-big:hover{transform:translateY(-3px);box-shadow:0 20px 56px rgba(232,85,42,0.45)}
+.cta-note{margin-top:20px;font-size:14px;color:rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+footer{padding:28px 24px;text-align:center;border-top:1px solid var(--border);font-size:13px;color:var(--text2)}
+footer a{color:var(--accent);text-decoration:none}
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.popup-overlay.show{display:flex}
+.popup{background:white;border-radius:24px;padding:40px 36px;max-width:480px;width:100%;text-align:center;position:relative;animation:popIn 0.3s ease}
+@keyframes popIn{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
+.popup-close{position:absolute;top:16px;right:20px;font-size:22px;cursor:pointer;color:var(--text2);background:none;border:none;font-family:'Cabinet Grotesk',sans-serif}
+.popup-badge{display:inline-block;background:#fff3f0;color:var(--accent);border:1.5px solid #fca894;border-radius:100px;padding:6px 16px;font-size:13px;font-weight:800;margin-bottom:20px}
+.popup h3{font-family:'Fraunces',serif;font-size:32px;font-weight:900;line-height:1.1;letter-spacing:-0.5px;margin-bottom:12px;color:var(--dark)}
+.popup h3 em{color:var(--accent);font-style:italic}
+.popup p{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:24px}
+.popup-price{font-family:'Fraunces',serif;font-size:52px;font-weight:900;color:var(--accent);line-height:1;margin-bottom:4px}
+.popup-original{font-size:15px;color:var(--text2);text-decoration:line-through;margin-bottom:24px}
+.popup-timer{font-size:13px;color:var(--text2);margin-bottom:8px;font-weight:700}
+#popup-countdown{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--accent);margin-bottom:24px}
+.popup-btn{display:block;width:100%;padding:17px;background:var(--accent);color:white;border:none;border-radius:14px;font-size:17px;font-weight:900;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;transition:all 0.2s;text-decoration:none;text-align:center;margin-bottom:10px}
+.popup-btn:hover{background:#c94420;transform:translateY(-1px)}
+.popup-skip{font-size:13px;color:var(--text2);cursor:pointer;text-decoration:underline;background:none;border:none;font-family:'Cabinet Grotesk',sans-serif}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(32px);transition:all 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:600px){.before-after{grid-template-columns:1fr}.plan.popular{transform:none}.cta-note{flex-direction:column;gap:6px}}
+</style>
+</head>
+<body>
+
+<div class="urgency-bar">
+  🔥 Oferta relâmpago termina em: <span id="countdown">00:00</span> &nbsp;·&nbsp; <span>50% OFF no plano Premium</span>
+</div>
+
+<nav>
+  <div class="nav-logo">Conversa<span>AI</span></div>
+  <a class="nav-cta" href="https://gabrieljklp01.github.io/conversaai" target="_blank">Testar grátis agora →</a>
+</nav>
+
+<div class="proof-bar">
+  <div class="proof-item">
+    <div class="avatars">
+      <div class="av" style="background:linear-gradient(135deg,#e8552a,#f7c948)">M</div>
+      <div class="av" style="background:linear-gradient(135deg,#6366f1,#a78bfa)">R</div>
+      <div class="av" style="background:linear-gradient(135deg,#22d3a0,#3b82f6)">A</div>
+      <div class="av" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">J</div>
+    </div>
+    <span><span>+2.400 pessoas</span> usaram essa semana</span>
+  </div>
+  <div class="proof-item">⭐⭐⭐⭐⭐ <span>4.9/5</span> de avaliação</div>
+  <div class="proof-item">🔒 <span>100% privado</span> — sem guardar dados</div>
+</div>
+
+<section class="hero">
+  <div class="hero-badge">O copiloto de conversas com IA mais poderoso do Brasil</div>
+  <h1>Você estava a<br><em>1 mensagem</em> de <u>tudo mudar</u></h1>
+  <p class="hero-sub">ConversaAI analisa qualquer conversa e te diz <strong>exatamente o que responder, quando e como</strong> — pra você parar de perder chances no amor, nas vendas e na vida.</p>
+  <div class="offer-box">
+    <div class="offer-spots"><div class="spot-dot"></div> Apenas 47 vagas restantes nessa oferta</div>
+    <div class="offer-original">De R$38/mês</div>
+    <div class="offer-price"><sup>R$</sup>19</div>
+    <div class="offer-period">por mês · cancela quando quiser</div>
+    <div class="offer-items">
+      <div class="offer-item">Análises ilimitadas todo dia</div>
+      <div class="offer-item">3 jogadas estratégicas por conversa</div>
+      <div class="offer-item">Simulador "e se eu mandar isso?"</div>
+      <div class="offer-item">Timing inteligente</div>
+      <div class="offer-item">Score de engajamento e interesse</div>
+      <div class="offer-item">Acesso imediato — funciona no celular</div>
+    </div>
+    <a class="btn-hero" href="https://gabrieljklp01.github.io/conversaai" target="_blank">🚀 Quero meu acesso agora — 50% OFF</a>
+    <a class="btn-free" href="https://gabrieljklp01.github.io/conversaai" target="_blank">Começar grátis sem cartão</a>
+    <div class="offer-guarantee">🔒 Garantia de 7 dias — se não gostar, devolvemos 100%</div>
+  </div>
+</section>
+
+<section class="section problem-bg">
+  <div class="section-inner reveal">
+    <div class="section-label">A verdade que ninguém fala</div>
+    <h2 class="section-title" style="color:white">A conversa que você <em style="color:var(--accent2)">não soube responder</em> custou caro</h2>
+    <p class="section-sub">Uma venda perdida. Um relacionamento que esfriou. Uma oportunidade que foi embora. Não por falta de sentimento — mas por falta da mensagem certa na hora certa.</p>
+    <div class="pain-grid">
+      <div class="pain-card"><div class="pain-icon">💔</div><div class="pain-title">No amor</div><div class="pain-text">Você manda a mensagem errada, a pessoa some. Fica dias sem saber se avança ou recua. O interesse vai embora enquanto você trava.</div></div>
+      <div class="pain-card"><div class="pain-icon">💼</div><div class="pain-title">Nas vendas</div><div class="pain-text">Cliente super animado some no WhatsApp. Você manda "oi, tudo bem?" e não recebe resposta. A venda vai pro concorrente.</div></div>
+      <div class="pain-card"><div class="pain-icon">🤝</div><div class="pain-title">No trabalho</div><div class="pain-text">Proposta enviada. Silêncio total. Você não sabe se insiste, espera ou muda a abordagem. A oportunidade escorrega.</div></div>
+    </div>
+    <div class="before-after">
+      <div class="ba-card before">
+        <div class="ba-label">Sem ConversaAI</div>
+        <div class="ba-item">Fica travado sem saber o que responder</div>
+        <div class="ba-item">Manda a mensagem errada na hora errada</div>
+        <div class="ba-item">Não sabe se a pessoa está interessada</div>
+        <div class="ba-item">Perde vendas e relacionamentos</div>
+      </div>
+      <div class="ba-card after">
+        <div class="ba-label">Com ConversaAI</div>
+        <div class="ba-item">Sabe exatamente o que responder em segundos</div>
+        <div class="ba-item">Tem 3 estratégias com mensagens prontas</div>
+        <div class="ba-item">Vê o nível de interesse em números reais</div>
+        <div class="ba-item">Fecha mais, conquista mais, perde menos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:8px">
+      <div class="section-label">O que você recebe</div>
+      <h2 class="section-title">Não é só uma IA que responde.<br>É um <em style="color:var(--accent)">estrategista</em> de conversas.</h2>
+    </div>
+    <div class="feat-grid reveal">
+      <div class="feat-card hero-card"><div class="feat-emoji">🔎</div><div class="feat-title">Diagnóstico cirúrgico</div><div class="feat-desc">A IA lê nas entrelinhas: tom, interesse real, intenções ocultas, nível de engajamento.</div></div>
+      <div class="feat-card"><div class="feat-emoji">♟️</div><div class="feat-title">3 jogadas prontas</div><div class="feat-desc">Segura, Ousada ou Estratégica. Cada uma com a mensagem exata para copiar e mandar.</div></div>
+      <div class="feat-card"><div class="feat-emoji">🔮</div><div class="feat-title">Previsão de reações</div><div class="feat-desc">Veja o que a outra pessoa vai responder antes de você enviar qualquer coisa.</div></div>
+      <div class="feat-card"><div class="feat-emoji">🧬</div><div class="feat-title">Simulador "e se?"</div><div class="feat-desc">Testa a mensagem antes de mandar. A IA simula a reação e te mostra se é boa ideia.</div></div>
+      <div class="feat-card"><div class="feat-emoji">⏱️</div><div class="feat-title">Timing perfeito</div><div class="feat-desc">Responder agora ou esperar? A IA sabe. Te diz o momento certo pra agir.</div></div>
+      <div class="feat-card"><div class="feat-emoji">📊</div><div class="feat-title">Score em tempo real</div><div class="feat-desc">Engajamento de 0 a 100. Interesse e risco. Tudo em números claros.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--surface);padding-top:80px;padding-bottom:80px">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <div class="section-label">Resultados reais</div>
+      <h2 class="section-title">Gente que parou de travar<br>e começou a <em style="color:var(--accent)">ganhar</em></h2>
+    </div>
+    <div class="test-grid reveal">
+      <div class="test-card"><div class="stars">★★★★★</div><div class="test-text">"Estava há 4 dias sem saber o que responder. Segui a jogada estratégica e hoje temos um encontro marcado."</div><div class="test-author"><div class="test-av" style="background:linear-gradient(135deg,#e8552a,#f7c948)">M</div><div><div class="test-name">Mariana S.</div><div class="test-role">Designer, São Paulo</div></div></div><div class="test-result">🎯 Encontro marcado em 48h</div></div>
+      <div class="test-card"><div class="stars">★★★★★</div><div class="test-text">"Fechei 2 vendas na mesma semana. O simulador de reações mudou como eu negocio no WhatsApp."</div><div class="test-author"><div class="test-av" style="background:linear-gradient(135deg,#6366f1,#a78bfa)">R</div><div><div class="test-name">Rafael M.</div><div class="test-role">Vendedor, BH</div></div></div><div class="test-result">💰 +2 vendas na primeira semana</div></div>
+      <div class="test-card"><div class="stars">★★★★★</div><div class="test-text">"Reengajei um cliente que havia sumido há 3 meses. Mandei a mensagem sugerida e ele respondeu em minutos."</div><div class="test-author"><div class="test-av" style="background:linear-gradient(135deg,#22d3a0,#3b82f6)">A</div><div><div class="test-name">Ana Clara P.</div><div class="test-role">Empreendedora, RJ</div></div></div><div class="test-result">🔁 Cliente reengajado após 3 meses</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-mid reveal">
+  <h2>Sua conversa está esperando.<br>O que você vai fazer?</h2>
+  <p>Cada hora que passa sem agir é uma hora que a outra pessoa esfria.</p>
+  <a class="btn-dark" href="https://gabrieljklp01.github.io/conversaai" target="_blank">Analisar minha conversa agora →</a>
+</div>
+
+<section class="section pricing-bg">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <div class="section-label" style="color:var(--accent2)">Planos e preços</div>
+      <h2 class="section-title" style="color:white">Menos que um café por semana.<br><em style="color:var(--accent2)">Mude tudo.</em></h2>
+    </div>
+    <div class="plans reveal">
+      <div class="plan">
+        <div class="plan-name">Grátis</div>
+        <div class="plan-price">R$0</div>
+        <div class="plan-period">para sempre</div>
+        <ul class="plan-feats"><li>3 análises por dia</li><li>Diagnóstico básico</li><li>3 respostas diretas</li><li>Modo rápido</li></ul>
+        <button class="plan-btn outline" onclick="window.open('https://gabrieljklp01.github.io/conversaai','_blank')">Começar grátis</button>
+      </div>
+      <div class="plan popular">
+        <div class="plan-badge">⚡ MAIS POPULAR — 50% OFF</div>
+        <div class="plan-from">De R$38/mês</div>
+        <div class="plan-name">Premium</div>
+        <div class="plan-price"><sup>R$</sup>19</div>
+        <div class="plan-period">por mês · oferta limitada</div>
+        <ul class="plan-feats"><li>Análises ilimitadas</li><li>Diagnóstico completo + perfil</li><li>3 jogadas com mensagem pronta</li><li>Simulador ilimitado</li><li>Timing inteligente</li><li>Score em tempo real</li><li>Todos os modos</li></ul>
+        <button class="plan-btn solid" onclick="window.open('https://gabrieljklp01.github.io/conversaai','_blank')">🚀 Quero o Premium agora</button>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><sup>R$</sup>49</div>
+        <div class="plan-period">por mês</div>
+        <ul class="plan-feats"><li>Tudo do Premium</li><li>Foco em vendas e negócios</li><li>Relatórios analíticos</li><li>Histórico de conversas</li><li>Suporte prioritário</li></ul>
+        <button class="plan-btn outline" onclick="window.open('https://gabrieljklp01.github.io/conversaai','_blank')">Assinar Pro</button>
+      </div>
+    </div>
+    <div class="guarantee reveal">
+      <div class="guarantee-icon">🛡️</div>
+      <div class="guarantee-text"><h3>Garantia total de 7 dias</h3><p>Teste por 7 dias. Se não ficar satisfeito, devolvemos 100% sem perguntas.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner" style="max-width:700px">
+    <div class="reveal" style="text-align:center">
+      <div class="section-label">Dúvidas</div>
+      <h2 class="section-title">Perguntas frequentes</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Funciona para qualquer tipo de conversa? <span class="faq-icon">+</span></div><div class="faq-a">Sim! WhatsApp, Instagram, e-mail, Tinder, LinkedIn — qualquer conversa de texto. Amor, vendas, trabalho e muito mais.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Minha conversa fica salva? <span class="faq-icon">+</span></div><div class="faq-a">Não. As conversas são analisadas em tempo real e não ficam armazenadas. Sua privacidade é 100% preservada.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Precisa instalar alguma coisa? <span class="faq-icon">+</span></div><div class="faq-a">Não! Funciona direto no navegador em qualquer dispositivo. Celular, computador, tablet.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Como funciona a garantia de 7 dias? <span class="faq-icon">+</span></div><div class="faq-a">Se em até 7 dias você não ficar satisfeito, devolvemos 100% do valor. Sem perguntas, sem burocracia.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Como cancelo? <span class="faq-icon">+</span></div><div class="faq-a">Cancela quando quiser em menos de 2 minutos. Sem fidelidade, sem multa.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div style="max-width:700px;margin:0 auto" class="reveal">
+    <h2>Para de deixar a conversa<br><em>decidir seu destino</em></h2>
+    <p>Você tem o controle. Só precisa da estratégia certa.</p>
+    <a class="btn-big" href="https://gabrieljklp01.github.io/conversaai" target="_blank">Analisar minha conversa agora →</a>
+    <div class="cta-note"><span>✓ Grátis para começar</span><span>✓ Sem cartão</span><span>✓ Resultado em 30 segundos</span><span>✓ Garantia 7 dias</span></div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 ConversaAI &nbsp;·&nbsp; <a href="https://gabrieljklp01.github.io/conversaai">Acessar o app</a> &nbsp;·&nbsp; Feito com ❤️ no Brasil</p>
+</footer>
+
+<div class="popup-overlay" id="popup">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup()">✕</button>
+    <div class="popup-badge">🎁 Espera! Oferta exclusiva</div>
+    <h3>Não vai embora sem seu <em>desconto especial</em></h3>
+    <p>Você estava a poucos cliques de parar de travar nas conversas. Pega esse cupom antes de ir:</p>
+    <div class="popup-price"><sup style="font-size:22px">R$</sup>9<span style="font-size:24px">,90</span></div>
+    <div class="popup-original">De R$19/mês — só hoje</div>
+    <div class="popup-timer">⏳ Essa oferta expira em:</div>
+    <div id="popup-countdown">05:00</div>
+    <a class="popup-btn" href="https://gabrieljklp01.github.io/conversaai" target="_blank" onclick="closePopup()">🚀 Sim! Quero por R$9,90 agora</a>
+    <button class="popup-skip" onclick="closePopup()">Não obrigado, prefiro pagar mais depois</button>
+  </div>
+</div>
+
+<script>
+function startCountdown(id,minutes){
+  let total=minutes*60;
+  const el=document.getElementById(id);
+  const t=setInterval(()=>{
+    const m=String(Math.floor(total/60)).padStart(2,'0');
+    const s=String(total%60).padStart(2,'0');
+    el.textContent=m+':'+s;
+    if(--total<0)clearInterval(t);
+  },1000);
+}
+startCountdown('countdown',18);
+startCountdown('popup-countdown',5);
+let popupShown=false;
+function showPopup(){if(!popupShown){popupShown=true;document.getElementById('popup').classList.add('show');}}
+function closePopup(){document.getElementById('popup').classList.remove('show');}
+document.addEventListener('mouseleave',(e)=>{if(e.clientY<10)showPopup();});
+setTimeout(()=>showPopup(),40000);
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
