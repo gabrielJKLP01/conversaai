@@ -8,214 +8,353 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#070910;
-  --surface:#0d1117;
-  --surface2:#121820;
-  --surface3:#1a2332;
-  --border:#1e2d42;
-  --border2:#253650;
-  --accent:#3b82f6;
-  --accent2:#60a5fa;
-  --accent-glow:rgba(59,130,246,0.15);
-  --text:#e8edf5;
-  --text2:#8ba3c0;
-  --text3:#4a6380;
-  --green:#22d3a0;
-  --amber:#f59e0b;
-  --red:#f43f5e;
-  --purple:#a78bfa;
+  --bg:#070910;--surface:#0d1117;--surface2:#121820;--surface3:#1a2332;
+  --border:#1e2d42;--border2:#253650;--accent:#3b82f6;--accent2:#60a5fa;
+  --accent-glow:rgba(59,130,246,0.15);--text:#e8edf5;--text2:#8ba3c0;
+  --text3:#4a6380;--green:#22d3a0;--amber:#f59e0b;--red:#f43f5e;--purple:#a78bfa;
 }
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
-.header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(7,9,16,0.9);backdrop-filter:blur(12px)}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#a78bfa);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;letter-spacing:-0.5px}
+.plans-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
+.plans-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;margin-bottom:8px}
+.plans-logo span{color:var(--accent2)}
+.plans-sub{color:var(--text2);font-size:16px;margin-bottom:48px;max-width:500px}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:900px;width:100%;margin-bottom:32px}
+.plan-card{background:var(--surface2);border:1.5px solid var(--border);border-radius:20px;padding:28px;cursor:pointer;transition:all 0.25s;text-align:left;position:relative;overflow:hidden}
+.plan-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 20px 48px rgba(59,130,246,0.15)}
+.plan-card.pro{border-color:var(--purple)}
+.plan-card.pro:hover{border-color:var(--purple);box-shadow:0 20px 48px rgba(167,139,250,0.15)}
+.plan-badge{position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.badge-popular{background:rgba(59,130,246,0.2);color:var(--accent2)}
+.badge-pro{background:rgba(167,139,250,0.2);color:var(--purple)}
+.plan-icon{font-size:32px;margin-bottom:14px}
+.plan-name{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:6px}
+.plan-price{font-family:'Syne',sans-serif;font-weight:800;font-size:36px;color:var(--accent2);margin-bottom:4px}
+.plan-price.pro-price{color:var(--purple)}
+.plan-period{font-size:12px;color:var(--text3);margin-bottom:16px}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.plan-features li{font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.plan-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.plan-btn{width:100%;padding:12px;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all 0.2s}
+.plan-btn.basic{background:var(--accent);color:white}
+.plan-btn.basic:hover{background:#2563eb}
+.plan-btn.popular-btn{background:var(--accent);color:white}
+.plan-btn.popular-btn:hover{background:#2563eb}
+.plan-btn.pro-btn{background:var(--purple);color:white}
+.plan-btn.pro-btn:hover{background:#8b5cf6}
+.app-screen{display:none;height:100vh;flex-direction:column}
+.app-screen.show{display:flex}
+.header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:rgba(7,9,16,0.95);backdrop-filter:blur(12px);flex-shrink:0}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{width:30px;height:30px;background:linear-gradient(135deg,#3b82f6,#a78bfa);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:16px}
 .logo-text span{color:var(--accent2)}
 .header-right{display:flex;align-items:center;gap:8px}
-.mode-pill{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px}
-.mode-btn{padding:5px 12px;border-radius:16px;border:none;background:transparent;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap}
-.mode-btn.active{background:var(--accent);color:#fff}
-.main{display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 57px);overflow:hidden}
+.plan-badge-header{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;background:rgba(59,130,246,0.15);color:var(--accent2);border:1px solid rgba(59,130,246,0.3)}
+.change-plan-btn{font-size:12px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;transition:color 0.2s}
+.change-plan-btn:hover{color:var(--text2)}
+.mode-tabs{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px}
+.mode-tab{padding:5px 12px;border-radius:16px;border:none;background:transparent;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.mode-tab.active{background:var(--accent);color:#fff}
+.main{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden}
 .left-panel{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.panel-title{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text2)}
-.obj-bar{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.panel-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text2)}
+.obj-bar{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
 .obj-bar::-webkit-scrollbar{display:none}
-.obj-chip{padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.obj-chip{padding:5px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap}
 .obj-chip:hover{border-color:var(--accent);color:var(--accent2)}
 .obj-chip.active{background:var(--accent-glow);border-color:var(--accent);color:var(--accent2)}
-.input-area{flex:1;padding:20px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
-.input-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
-.conv-textarea{width:100%;flex:1;min-height:200px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;resize:none;outline:none;transition:border-color 0.2s}
+.input-area{flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+.input-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.conv-textarea{width:100%;flex:1;min-height:180px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;resize:none;outline:none;transition:border-color 0.2s}
 .conv-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 .conv-textarea::placeholder{color:var(--text3)}
-.upload-area{border:1px dashed var(--border2);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;color:var(--text3);font-size:13px}
-.upload-area:hover{border-color:var(--accent);color:var(--accent2);background:var(--accent-glow)}
-.analyze-btn{width:100%;padding:13px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;border-radius:10px;color:#fff;font-family:'Syne',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:all 0.2s;letter-spacing:0.3px;position:relative;overflow:hidden}
+.upload-zone{border:2px dashed var(--border2);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.upload-zone:hover{border-color:var(--accent);background:var(--accent-glow)}
+.upload-zone.has-image{border-color:var(--green);border-style:solid}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.upload-icon{font-size:32px;margin-bottom:8px}
+.upload-text{font-size:13px;color:var(--text2)}
+.upload-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.preview-img{max-width:100%;max-height:200px;border-radius:8px;margin-top:8px;display:none}
+.analyze-btn{width:100%;padding:13px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;border-radius:10px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;flex-shrink:0}
 .analyze-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(59,130,246,0.3)}
-.analyze-btn:active{transform:translateY(0)}
 .analyze-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-.btn-shimmer{position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);animation:shimmer 1.5s infinite}
-@keyframes shimmer{to{left:100%}}
-.right-panel{display:flex;flex-direction:column;overflow-y:auto;background:var(--surface)}
-.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:40px;text-align:center}
-.empty-icon{width:64px;height:64px;background:var(--surface2);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px}
-.empty-title{font-family:'Syne',sans-serif;font-weight:600;font-size:18px}
-.empty-sub{color:var(--text2);font-size:14px;max-width:280px}
-.results{padding:20px;display:flex;flex-direction:column;gap:16px}
-.score-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.score-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
-.score-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
-.score-value{font-family:'Syne',sans-serif;font-weight:700;font-size:22px}
-.score-sub{font-size:11px;color:var(--text2);margin-top:2px}
-.score-green{color:var(--green)}
-.score-amber{color:var(--amber)}
-.score-red{color:var(--red)}
-.section{background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.section-head{padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
-.section-icon{font-size:15px}
-.section-title{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;flex:1}
-.section-badge{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--surface3)}
-.section-body{padding:14px 16px}
-.section-text{color:var(--text2);font-size:13px;line-height:1.7}
-.play-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.play-card{border-radius:10px;padding:12px;border:1px solid;transition:all 0.2s}
-.play-card.safe{background:rgba(34,211,160,0.05);border-color:rgba(34,211,160,0.2)}
-.play-card.bold{background:rgba(244,63,94,0.05);border-color:rgba(244,63,94,0.2)}
-.play-card.strategic{background:rgba(167,139,250,0.05);border-color:rgba(167,139,250,0.2)}
-.play-card:hover{transform:translateY(-2px)}
-.play-card.safe:hover{background:rgba(34,211,160,0.1)}
-.play-card.bold:hover{background:rgba(244,63,94,0.1)}
-.play-card.strategic:hover{background:rgba(167,139,250,0.1)}
-.play-type{font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:4px}
-.play-card.safe .play-type{color:var(--green)}
-.play-card.bold .play-type{color:var(--red)}
-.play-card.strategic .play-type{color:var(--purple)}
-.play-name{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;margin-bottom:6px}
-.play-desc{font-size:12px;color:var(--text2);line-height:1.5}
-.play-send{margin-top:8px;font-size:11px;padding:4px 10px;border-radius:6px;border:none;background:rgba(255,255,255,0.08);color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;transition:all 0.2s}
-.play-send:hover{background:rgba(255,255,255,0.15);color:var(--text)}
-.resp-list{display:flex;flex-direction:column;gap:8px}
-.resp-item{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.resp-text{font-size:13px;color:var(--text);line-height:1.5;flex:1}
-.resp-actions{display:flex;gap:6px;flex-shrink:0;margin-top:2px}
-.resp-btn{padding:3px 8px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap}
-.resp-btn:hover{border-color:var(--accent);color:var(--accent2)}
-.sim-row{display:flex;gap:8px}
-.sim-input{flex:1;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
-.sim-input:focus{border-color:var(--accent)}
-.sim-btn{padding:9px 14px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap}
-.sim-btn:hover{border-color:var(--accent);color:var(--accent2)}
-.sim-result{margin-top:10px;padding:12px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.2);border-radius:8px;font-size:13px;color:var(--text2);display:none;white-space:pre-wrap}
-.timing-card{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px}
-.timing-icon{font-size:24px}
-.timing-text{font-size:13px;color:var(--text2);line-height:1.5}
-.timing-text strong{color:var(--text)}
-.loading-overlay{display:none;position:absolute;inset:0;background:rgba(7,9,16,0.8);backdrop-filter:blur(4px);z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+.upgrade-notice{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--text2);text-align:center;display:none}
+.upgrade-notice.show{display:block}
+.upgrade-notice a{color:var(--purple);cursor:pointer;font-weight:700}
+.right-panel{display:flex;flex-direction:column;overflow-y:auto;background:var(--surface);position:relative}
+.loading-overlay{display:none;position:absolute;inset:0;background:rgba(7,9,16,0.85);backdrop-filter:blur(4px);z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:16px}
 .loading-overlay.show{display:flex}
-.loading-spinner{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
+.spinner{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-steps{display:flex;flex-direction:column;gap:6px;align-items:center}
 .loading-step{font-size:13px;color:var(--text2);opacity:0;transition:opacity 0.3s}
 .loading-step.visible{opacity:1}
 .loading-step.done{color:var(--green);opacity:0.7}
-::-webkit-scrollbar{width:5px;height:5px}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px;text-align:center}
+.empty-icon{width:60px;height:60px;background:var(--surface2);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.empty-title{font-family:'Syne',sans-serif;font-weight:600;font-size:17px}
+.empty-sub{color:var(--text2);font-size:13px;max-width:260px;line-height:1.6}
+.results{padding:18px;display:flex;flex-direction:column;gap:14px}
+.score-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.score-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px;text-align:center}
+.score-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
+.score-value{font-family:'Syne',sans-serif;font-weight:700;font-size:20px}
+.score-sub{font-size:10px;color:var(--text2);margin-top:2px}
+.score-green{color:var(--green)}.score-amber{color:var(--amber)}.score-red{color:var(--red)}
+.section{background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.section-head{padding:11px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.section-icon{font-size:14px}
+.section-title{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;flex:1}
+.section-badge{font-size:10px;padding:2px 7px;border-radius:20px;background:var(--surface3);color:var(--text2)}
+.section-body{padding:12px 14px}
+.section-text{color:var(--text2);font-size:13px;line-height:1.7}
+.play-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.play-card{border-radius:10px;padding:11px;border:1px solid;transition:all 0.2s}
+.play-card.safe{background:rgba(34,211,160,0.05);border-color:rgba(34,211,160,0.2)}
+.play-card.bold-play{background:rgba(244,63,94,0.05);border-color:rgba(244,63,94,0.2)}
+.play-card.strategic{background:rgba(167,139,250,0.05);border-color:rgba(167,139,250,0.2)}
+.play-card:hover{transform:translateY(-2px)}
+.play-type{font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:4px}
+.play-card.safe .play-type{color:var(--green)}
+.play-card.bold-play .play-type{color:var(--red)}
+.play-card.strategic .play-type{color:var(--purple)}
+.play-name{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;margin-bottom:5px}
+.play-desc{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:8px}
+.play-copy{width:100%;font-size:10px;padding:4px 8px;border-radius:6px;border:none;background:rgba(255,255,255,0.07);color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.play-copy:hover{background:rgba(255,255,255,0.14);color:var(--text)}
+.resp-list{display:flex;flex-direction:column;gap:7px}
+.resp-item{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.resp-text{font-size:12px;color:var(--text);line-height:1.5;flex:1}
+.resp-copy{padding:3px 8px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:10px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap;flex-shrink:0}
+.resp-copy:hover{border-color:var(--accent);color:var(--accent2)}
+.timing-card{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:11px 13px;display:flex;align-items:center;gap:10px}
+.timing-icon{font-size:22px}
+.timing-text{font-size:12px;color:var(--text2);line-height:1.5}
+.timing-text strong{color:var(--text)}
+.sim-row{display:flex;gap:7px}
+.sim-input{flex:1;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none}
+.sim-input:focus{border-color:var(--accent)}
+.sim-btn{padding:8px 12px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap}
+.sim-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.sim-result{margin-top:8px;padding:10px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.2);border-radius:8px;font-size:12px;color:var(--text2);display:none;white-space:pre-wrap;line-height:1.6}
+.divider{height:1px;background:var(--border);margin:4px 0}
+.profile-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.ptag{padding:2px 9px;border-radius:20px;font-size:11px;background:var(--surface3);border:1px solid var(--border2);color:var(--text2)}
+.risk-bar-wrap{margin-top:8px}
+.risk-label-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:3px}
+.risk-bar{height:5px;background:var(--surface3);border-radius:10px;overflow:hidden}
+.risk-fill{height:100%;border-radius:10px;transition:width 0.8s ease}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 14px;font-size:12px;color:var(--text);z-index:999;transform:translateY(60px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
-.divider{height:1px;background:var(--border);margin:4px 0}
-.profile-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.ptag{padding:3px 10px;border-radius:20px;font-size:12px;background:var(--surface3);border:1px solid var(--border2);color:var(--text2)}
-.risk-bar-wrap{margin-top:10px}
-.risk-label-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:4px}
-.risk-bar{height:6px;background:var(--surface3);border-radius:10px;overflow:hidden}
-.risk-fill{height:100%;border-radius:10px;transition:width 0.8s ease}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13px;color:var(--text);z-index:999;transform:translateY(60px);opacity:0;transition:all 0.3s;pointer-events:none}
-.toast.show{transform:translateY(0);opacity:1}
-@media(max-width:700px){
-  .main{grid-template-columns:1fr;grid-template-rows:auto auto;height:auto}
-  .left-panel{max-height:55vh}
-  .play-grid{grid-template-columns:1fr}
-}
+@media(max-width:700px){.main{grid-template-columns:1fr;height:auto}.left-panel{max-height:60vh}.play-grid{grid-template-columns:1fr}.app-screen.show{height:auto;min-height:100vh}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="logo">
-    <div class="logo-icon">🧭</div>
-    <div class="logo-text">Conversa<span>AI</span></div>
-  </div>
-  <div class="header-right">
-    <div class="mode-pill">
-      <button class="mode-btn active" onclick="setMode('rapido',this)">⚡ Rápido</button>
-      <button class="mode-btn" onclick="setMode('estrategico',this)">🎯 Estratégico</button>
-      <button class="mode-btn" onclick="setMode('profundo',this)">🧠 Profundo</button>
+<div class="plans-screen" id="plansScreen">
+  <div class="plans-logo">Conversa<span>AI</span></div>
+  <p class="plans-sub">Escolha seu plano e comece a dominar qualquer conversa com inteligência artificial</p>
+  <div class="plans-grid">
+    <div class="plan-card" onclick="selectPlan('basico')">
+      <div class="plan-icon">💬</div>
+      <div class="plan-name">Básico</div>
+      <div class="plan-price">R$19<span style="font-size:16px;color:var(--text2)">/mês</span></div>
+      <div class="plan-period">Análise de texto de conversas</div>
+      <ul class="plan-features">
+        <li>Cole o texto da conversa</li>
+        <li>Diagnóstico completo</li>
+        <li>3 jogadas estratégicas</li>
+        <li>Respostas prontas para copiar</li>
+        <li>Score de engajamento</li>
+        <li>Timing inteligente</li>
+      </ul>
+      <button class="plan-btn basic">Começar agora →</button>
+    </div>
+    <div class="plan-card" onclick="selectPlan('premium')">
+      <div class="plan-badge badge-popular">⚡ POPULAR</div>
+      <div class="plan-icon">📱</div>
+      <div class="plan-name">Premium</div>
+      <div class="plan-price">R$39<span style="font-size:16px;color:var(--text2)">/mês</span></div>
+      <div class="plan-period">Análise de prints de conversa</div>
+      <ul class="plan-features">
+        <li>Tudo do plano Básico</li>
+        <li>Envie print/screenshot da conversa</li>
+        <li>IA lê a imagem automaticamente</li>
+        <li>Análise de WhatsApp, Instagram, etc</li>
+        <li>Simulador de reações avançado</li>
+        <li>Análise de perfil comportamental</li>
+      </ul>
+      <button class="plan-btn popular-btn">Quero o Premium →</button>
+    </div>
+    <div class="plan-card pro" onclick="selectPlan('pro')">
+      <div class="plan-badge badge-pro">👑 PRO</div>
+      <div class="plan-icon">🔍</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price pro-price">R$79<span style="font-size:16px;color:var(--text2)">/mês</span></div>
+      <div class="plan-period">Análise de fotos e qualquer imagem</div>
+      <ul class="plan-features">
+        <li>Tudo do plano Premium</li>
+        <li>Analisa qualquer foto ou imagem</li>
+        <li>Lê perfis de redes sociais</li>
+        <li>Analisa memes e contexto visual</li>
+        <li>Relatório de comportamento completo</li>
+        <li>Suporte prioritário</li>
+      </ul>
+      <button class="plan-btn pro-btn">Quero o Pro →</button>
     </div>
   </div>
+  <p style="font-size:12px;color:var(--text3)">✓ Cancela quando quiser &nbsp;·&nbsp; ✓ Garantia 7 dias &nbsp;·&nbsp; ✓ Funciona no celular</p>
 </div>
 
-<div class="main">
-  <div class="left-panel">
-    <div class="panel-header">
-      <span class="panel-title">Conversa</span>
-      <span style="font-size:12px;color:var(--text3)">Cole ou descreva abaixo</span>
+<div class="app-screen" id="appScreen">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">🧭</div>
+      <div class="logo-text">Conversa<span>AI</span></div>
     </div>
-    <div class="obj-bar">
-      <button class="obj-chip active" onclick="setObj(this,'conquistar alguém')">💘 Conquista</button>
-      <button class="obj-chip" onclick="setObj(this,'vender algo')">💼 Vendas</button>
-      <button class="obj-chip" onclick="setObj(this,'reengajar alguém que sumiu')">🔁 Reengajar</button>
-      <button class="obj-chip" onclick="setObj(this,'manter o relacionamento')">🤝 Manter</button>
-      <button class="obj-chip" onclick="setObj(this,'encerrar sem conflito')">🕊️ Encerrar</button>
-    </div>
-    <div class="input-area">
-      <div>
-        <div class="input-label">Conversa</div>
-        <textarea class="conv-textarea" id="convInput" placeholder="Cole aqui a conversa...&#10;&#10;Ex:&#10;Você: Oi, tudo bem?&#10;Ela: oi, tudo sim&#10;Você: Sumiu né haha&#10;Ela: kkk é, fiquei ocupada" rows="10"></textarea>
+    <div class="header-right">
+      <div class="mode-tabs">
+        <button class="mode-tab active" onclick="setMode('rapido',this)">⚡ Rápido</button>
+        <button class="mode-tab" onclick="setMode('estrategico',this)">🎯 Estratégico</button>
+        <button class="mode-tab" onclick="setMode('profundo',this)">🧠 Profundo</button>
       </div>
-      <div class="upload-area" onclick="toast('Upload de prints em breve!')">
-        📎 Arrastar ou clicar para enviar print da conversa
-      </div>
-      <button class="analyze-btn" id="analyzeBtn" onclick="analyze()">
-        <span class="btn-shimmer"></span>
-        Analisar Conversa
-      </button>
+      <span class="plan-badge-header" id="planBadge">Básico</span>
+      <button class="change-plan-btn" onclick="changePlan()">Trocar plano</button>
     </div>
   </div>
 
-  <div class="right-panel" id="rightPanel" style="position:relative">
-    <div class="loading-overlay" id="loadingOverlay">
-      <div class="loading-spinner"></div>
-      <div class="loading-steps">
-        <div class="loading-step" id="ls1">🔍 Lendo contexto...</div>
-        <div class="loading-step" id="ls2">🧠 Analisando perfil</div>
-        <div class="loading-step" id="ls3">🔮 Prevendo cenários</div>
-        <div class="loading-step" id="ls4">💬 Gerando estratégias</div>
+  <div class="main">
+    <div class="left-panel">
+      <div class="panel-header">
+        <span class="panel-title" id="inputTitle">Texto da conversa</span>
+        <span style="font-size:11px;color:var(--text3)" id="inputHint">Cole a conversa abaixo</span>
+      </div>
+      <div class="obj-bar">
+        <button class="obj-chip active" onclick="setObj(this,'conquistar alguém')">💘 Conquista</button>
+        <button class="obj-chip" onclick="setObj(this,'vender algo')">💼 Vendas</button>
+        <button class="obj-chip" onclick="setObj(this,'reengajar alguém que sumiu')">🔁 Reengajar</button>
+        <button class="obj-chip" onclick="setObj(this,'manter o relacionamento')">🤝 Manter</button>
+        <button class="obj-chip" onclick="setObj(this,'encerrar sem conflito')">🕊️ Encerrar</button>
+      </div>
+      <div class="input-area">
+        <div id="textInputArea">
+          <div class="input-label">Conversa</div>
+          <textarea class="conv-textarea" id="convInput" placeholder="Cole aqui a conversa...&#10;&#10;Ex:&#10;Você: Oi, tudo bem?&#10;Ela: oi, tudo sim&#10;Você: Sumiu né haha&#10;Ela: kkk é, fiquei ocupada" rows="10"></textarea>
+        </div>
+        <div id="imageInputArea" style="display:none">
+          <div class="input-label" id="imageLabel">Print da conversa</div>
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" id="imageInput" accept="image/*" onchange="handleImage(event)">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text" id="uploadText">Clique ou arraste a imagem aqui</div>
+            <div class="upload-sub" id="uploadSub">PNG, JPG, WEBP — Print do WhatsApp, Instagram, etc</div>
+            <img id="previewImg" class="preview-img" alt="Preview">
+          </div>
+          <div style="margin-top:8px">
+            <div class="input-label">Contexto adicional (opcional)</div>
+            <textarea class="conv-textarea" id="contextInput" placeholder="Descreva o contexto se quiser..." rows="3" style="min-height:70px"></textarea>
+          </div>
+        </div>
+        <div class="upgrade-notice" id="upgradeNotice">
+          🔒 Envio de imagens disponível no plano <strong>Premium</strong> ou <strong>Pro</strong>. <a onclick="changePlan()">Fazer upgrade →</a>
+        </div>
+        <button class="analyze-btn" id="analyzeBtn" onclick="analyze()">Analisar Conversa</button>
       </div>
     </div>
-    <div id="emptyState" class="empty-state">
-      <div class="empty-icon">🧭</div>
-      <div class="empty-title">Copiloto de Conversas</div>
-      <div class="empty-sub">Cole uma conversa ao lado e escolha seu objetivo. A IA vai analisar, prever e criar estratégias para você.</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px">
-        <span style="font-size:12px;color:var(--text3);background:var(--surface2);padding:4px 12px;border-radius:20px;border:1px solid var(--border)">🔎 Diagnóstico</span>
-        <span style="font-size:12px;color:var(--text3);background:var(--surface2);padding:4px 12px;border-radius:20px;border:1px solid var(--border)">🔮 Previsão</span>
-        <span style="font-size:12px;color:var(--text3);background:var(--surface2);padding:4px 12px;border-radius:20px;border:1px solid var(--border)">♟️ Jogadas</span>
+
+    <div class="right-panel" id="rightPanel">
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-steps">
+          <div class="loading-step" id="ls1">🔍 Lendo conversa...</div>
+          <div class="loading-step" id="ls2">🧠 Analisando perfil</div>
+          <div class="loading-step" id="ls3">🔮 Prevendo cenários</div>
+          <div class="loading-step" id="ls4">💬 Gerando estratégias</div>
+        </div>
       </div>
+      <div id="emptyState" class="empty-state">
+        <div class="empty-icon">🧭</div>
+        <div class="empty-title">Pronto para analisar</div>
+        <div class="empty-sub">Cole uma conversa ou envie um print, escolha seu objetivo e clique em analisar.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px">
+          <span style="font-size:11px;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:20px;border:1px solid var(--border)">🔎 Diagnóstico</span>
+          <span style="font-size:11px;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:20px;border:1px solid var(--border)">🔮 Previsão</span>
+          <span style="font-size:11px;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:20px;border:1px solid var(--border)">♟️ Jogadas</span>
+        </div>
+      </div>
+      <div id="resultsArea" class="results" style="display:none"></div>
     </div>
-    <div id="resultsArea" class="results" style="display:none"></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+const GEMINI_KEY = 'AIzaSyAmcP8G7XwGO_javxJ2CP97BAn2FQR_EzY';
+let currentPlan = 'basico';
 let currentMode = 'rapido';
 let currentObj = 'conquistar alguém';
+let currentImageBase64 = null;
+let currentImageMime = null;
 let analysisData = null;
+
+function selectPlan(plan) {
+  currentPlan = plan;
+  document.getElementById('plansScreen').style.display = 'none';
+  document.getElementById('appScreen').classList.add('show');
+  const names = {basico:'Básico',premium:'Premium',pro:'Pro'};
+  document.getElementById('planBadge').textContent = names[plan];
+  updateInputUI();
+}
+
+function changePlan() {
+  document.getElementById('plansScreen').style.display = 'flex';
+  document.getElementById('appScreen').classList.remove('show');
+  document.getElementById('resultsArea').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'flex';
+}
+
+function updateInputUI() {
+  const textArea = document.getElementById('textInputArea');
+  const imageArea = document.getElementById('imageInputArea');
+  const upgradeNotice = document.getElementById('upgradeNotice');
+  const inputTitle = document.getElementById('inputTitle');
+  const inputHint = document.getElementById('inputHint');
+  const imageLabel = document.getElementById('imageLabel');
+  const uploadSub = document.getElementById('uploadSub');
+  if (currentPlan === 'basico') {
+    textArea.style.display = 'block';
+    imageArea.style.display = 'none';
+    upgradeNotice.classList.remove('show');
+    inputTitle.textContent = 'Texto da conversa';
+    inputHint.textContent = 'Cole a conversa abaixo';
+  } else if (currentPlan === 'premium') {
+    textArea.style.display = 'block';
+    imageArea.style.display = 'block';
+    upgradeNotice.classList.remove('show');
+    inputTitle.textContent = 'Texto ou Print';
+    inputHint.textContent = 'Cole texto ou envie print';
+    imageLabel.textContent = 'Print da conversa (WhatsApp, Instagram...)';
+    uploadSub.textContent = 'PNG, JPG — Print do WhatsApp, Instagram, Tinder, etc';
+  } else if (currentPlan === 'pro') {
+    textArea.style.display = 'block';
+    imageArea.style.display = 'block';
+    upgradeNotice.classList.remove('show');
+    inputTitle.textContent = 'Texto ou Imagem';
+    inputHint.textContent = 'Cole texto ou envie qualquer imagem';
+    imageLabel.textContent = 'Foto ou imagem para análise';
+    uploadSub.textContent = 'PNG, JPG — Qualquer foto, perfil, meme, screenshot';
+  }
+}
 
 function setMode(m, el) {
   currentMode = m;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
 }
 
@@ -232,9 +371,31 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+function handleImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const result = e.target.result;
+    currentImageBase64 = result.split(',')[1];
+    currentImageMime = file.type;
+    const preview = document.getElementById('previewImg');
+    preview.src = result;
+    preview.style.display = 'block';
+    document.getElementById('uploadText').textContent = '✓ ' + file.name;
+    document.getElementById('uploadZone').classList.add('has-image');
+    toast('Imagem carregada!');
+  };
+  reader.readAsDataURL(file);
+}
+
 async function analyze() {
   const conv = document.getElementById('convInput').value.trim();
-  if (!conv) { toast('Cole uma conversa primeiro!'); return; }
+  const contextEl = document.getElementById('contextInput');
+  const context = contextEl ? contextEl.value.trim() : '';
+  const hasText = conv.length > 0;
+  const hasImage = currentImageBase64 !== null;
+  if (!hasText && !hasImage) { toast('Cole uma conversa ou envie uma imagem!'); return; }
 
   const btn = document.getElementById('analyzeBtn');
   btn.disabled = true;
@@ -252,54 +413,42 @@ async function analyze() {
   }, 700);
 
   const modeDesc = {
-    rapido: 'Modo rápido: foco em respostas diretas e objetivas, sem análise muito longa.',
-    estrategico: 'Modo estratégico: análise completa com jogadas táticas e planos de ação.',
-    profundo: 'Modo profundo: relatório detalhado, padrões de comportamento, erros e sugestões de melhoria.'
+    rapido:'Modo rápido: respostas diretas e objetivas.',
+    estrategico:'Modo estratégico: análise completa com jogadas táticas.',
+    profundo:'Modo profundo: relatório detalhado, padrões de comportamento e erros.'
+  };
+  const planDesc = {
+    basico:'Analise o texto da conversa fornecido.',
+    premium:'Analise o print/screenshot da conversa. Leia todas as mensagens visíveis na imagem.',
+    pro:'Analise a imagem completamente — pode ser um print de conversa, foto de perfil, meme ou qualquer imagem relevante.'
   };
 
-  const prompt = `Você é um especialista em comunicação estratégica e psicologia comportamental. Analise a conversa abaixo e retorne APENAS um JSON válido (sem markdown, sem explicações fora do JSON).
-
+  const textPrompt = `Você é um especialista em comunicação estratégica e psicologia comportamental. ${planDesc[currentPlan]}
 Objetivo do usuário: ${currentObj}
 ${modeDesc[currentMode]}
-
-Conversa:
-${conv}
-
-Retorne este JSON exato:
-{
-  "engajamento": <número 0-100>,
-  "interesse": "<baixo|médio|alto>",
-  "risco": "<baixo|médio|alto>",
-  "risco_label": "<ex: risco de perder contato>",
-  "diagnostico": "<2-3 frases descrevendo o estado atual da conversa>",
-  "perfil": "<2 frases sobre o perfil comportamental da outra pessoa>",
-  "tags_perfil": ["<tag1>","<tag2>","<tag3>"],
-  "previsao": "<2-3 frases prevendo cenários prováveis>",
-  "cenarios": ["<cenário 1>","<cenário 2>","<cenário 3>"],
-  "timing": "<responder agora|esperar um pouco|esperar bastante>",
-  "timing_motivo": "<motivo em 1 frase>",
-  "jogada_segura": {"nome":"<nome>","descricao":"<desc>","mensagem":"<mensagem exata>"},
-  "jogada_ousada": {"nome":"<nome>","descricao":"<desc>","mensagem":"<mensagem exata>"},
-  "jogada_estrategica": {"nome":"<nome>","descricao":"<desc>","mensagem":"<mensagem exata>"},
-  "respostas": ["<resposta 1>","<resposta 2>","<resposta 3>"]
-}`;
+${conv ? 'Texto da conversa:\n' + conv : ''}
+${context ? 'Contexto adicional: ' + context : ''}
+Retorne APENAS um JSON válido sem markdown:
+{"engajamento":<0-100>,"interesse":"<baixo|médio|alto>","risco":"<baixo|médio|alto>","risco_label":"<label>","diagnostico":"<2-3 frases>","perfil":"<2 frases>","tags_perfil":["<t1>","<t2>","<t3>"],"previsao":"<2-3 frases>","cenarios":["<c1>","<c2>","<c3>"],"timing":"<responder agora|esperar um pouco|esperar bastante>","timing_motivo":"<motivo>","jogada_segura":{"nome":"<n>","descricao":"<d>","mensagem":"<m>"},"jogada_ousada":{"nome":"<n>","descricao":"<d>","mensagem":"<m>"},"jogada_estrategica":{"nome":"<n>","descricao":"<d>","mensagem":"<m>"},"respostas":["<r1>","<r2>","<r3>"]}`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
+    let requestBody;
+    if (hasImage && currentPlan !== 'basico') {
+      requestBody = { contents:[{ parts:[{ text: textPrompt },{ inline_data:{ mime_type: currentImageMime, data: currentImageBase64 }}]}]};
+    } else {
+      requestBody = { contents:[{ parts:[{ text: textPrompt }]}]};
+    }
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+      { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(requestBody) }
+    );
     const data = await res.json();
-    const raw = data.content[0].text.replace(/```json|```/g, '').trim();
+    if (data.error) throw new Error(data.error.message);
+    const raw = data.candidates[0].content.parts[0].text.replace(/```json|```/g,'').trim();
     analysisData = JSON.parse(raw);
     renderResults(analysisData);
   } catch(e) {
-    toast('Erro na análise. Tente novamente.');
+    toast('Erro: ' + (e.message || 'Tente novamente'));
     document.getElementById('emptyState').style.display = 'flex';
   }
 
@@ -309,158 +458,51 @@ Retorne este JSON exato:
   btn.disabled = false;
 }
 
-function esc(s) {
-  return (s||'').replace(/&/g,'&amp;').replace(/'/g,"&#39;").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/'/g,"&#39;").replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function copyMsg(msg){
+  const d=msg.replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+  navigator.clipboard.writeText(d).then(()=>toast('Copiado!')).catch(()=>{const t=document.createElement('textarea');t.value=d;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);toast('Copiado!');});
 }
 
-function copyMsg(msg) {
-  const decoded = msg.replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
-  navigator.clipboard.writeText(decoded)
-    .then(() => toast('Mensagem copiada!'))
-    .catch(() => {
-      const ta = document.createElement('textarea');
-      ta.value = decoded;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      toast('Mensagem copiada!');
-    });
-}
-
-function renderResults(d) {
-  const eng = d.engajamento;
-  const engColor = eng >= 70 ? 'score-green' : eng >= 40 ? 'score-amber' : 'score-red';
-  const intColor = d.interesse === 'alto' ? 'score-green' : d.interesse === 'médio' ? 'score-amber' : 'score-red';
-  const riskColor = d.risco === 'baixo' ? 'score-green' : d.risco === 'médio' ? 'score-amber' : 'score-red';
-  const riskFill = d.risco === 'baixo' ? '#22d3a0' : d.risco === 'médio' ? '#f59e0b' : '#f43f5e';
-  const riskPct = d.risco === 'baixo' ? '25%' : d.risco === 'médio' ? '55%' : '85%';
-  const timingIcon = d.timing === 'responder agora' ? '⚡' : d.timing === 'esperar um pouco' ? '⏳' : '🕐';
-
-  const html = `
+function renderResults(d){
+  const eng=d.engajamento;
+  const engColor=eng>=70?'score-green':eng>=40?'score-amber':'score-red';
+  const intColor=d.interesse==='alto'?'score-green':d.interesse==='médio'?'score-amber':'score-red';
+  const riskColor=d.risco==='baixo'?'score-green':d.risco==='médio'?'score-amber':'score-red';
+  const riskFill=d.risco==='baixo'?'#22d3a0':d.risco==='médio'?'#f59e0b':'#f43f5e';
+  const riskPct=d.risco==='baixo'?'25%':d.risco==='médio'?'55%':'85%';
+  const timingIcon=d.timing==='responder agora'?'⚡':d.timing==='esperar um pouco'?'⏳':'🕐';
+  const html=`
   <div class="score-row">
     <div class="score-card"><div class="score-label">Engajamento</div><div class="score-value ${engColor}">${eng}</div><div class="score-sub">/ 100</div></div>
     <div class="score-card"><div class="score-label">Interesse</div><div class="score-value ${intColor}">${d.interesse}</div><div class="score-sub">detectado</div></div>
     <div class="score-card"><div class="score-label">Risco</div><div class="score-value ${riskColor}">${d.risco}</div><div class="score-sub">${d.risco_label||''}</div></div>
   </div>
-
-  <div class="section">
-    <div class="section-head"><span class="section-icon">🔎</span><span class="section-title">Diagnóstico</span></div>
-    <div class="section-body">
-      <div class="section-text">${d.diagnostico}</div>
-      <div class="divider"></div>
-      <div style="font-size:12px;color:var(--text3);margin:6px 0">PERFIL DA PESSOA</div>
-      <div class="section-text">${d.perfil}</div>
-      <div class="profile-tags">${(d.tags_perfil||[]).map(t=>`<span class="ptag">${t}</span>`).join('')}</div>
-      <div class="risk-bar-wrap">
-        <div class="risk-label-row"><span>Nível de risco</span><span>${d.risco}</span></div>
-        <div class="risk-bar"><div class="risk-fill" style="width:${riskPct};background:${riskFill}"></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head"><span class="section-icon">🔮</span><span class="section-title">Previsão</span></div>
-    <div class="section-body">
-      <div class="section-text">${d.previsao}</div>
-      <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
-        ${(d.cenarios||[]).map((c,i)=>`<div style="display:flex;gap:8px;font-size:13px;color:var(--text2)"><span style="color:var(--text3);font-size:11px;margin-top:2px">0${i+1}</span><span>${c}</span></div>`).join('')}
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head"><span class="section-icon">♟️</span><span class="section-title">Jogadas</span></div>
-    <div class="section-body" style="padding-bottom:14px">
-      <div class="play-grid">
-        <div class="play-card safe">
-          <div class="play-type">Segura</div>
-          <div class="play-name">${d.jogada_segura?.nome||'Jogada Segura'}</div>
-          <div class="play-desc">${d.jogada_segura?.descricao||''}</div>
-          <button class="play-send" onclick="copyMsg(this.dataset.msg)" data-msg="${esc(d.jogada_segura?.mensagem)}">Copiar mensagem</button>
-        </div>
-        <div class="play-card bold">
-          <div class="play-type">Ousada</div>
-          <div class="play-name">${d.jogada_ousada?.nome||'Jogada Ousada'}</div>
-          <div class="play-desc">${d.jogada_ousada?.descricao||''}</div>
-          <button class="play-send" onclick="copyMsg(this.dataset.msg)" data-msg="${esc(d.jogada_ousada?.mensagem)}">Copiar mensagem</button>
-        </div>
-        <div class="play-card strategic">
-          <div class="play-type">Estratégica</div>
-          <div class="play-name">${d.jogada_estrategica?.nome||'Jogada Estratégica'}</div>
-          <div class="play-desc">${d.jogada_estrategica?.descricao||''}</div>
-          <button class="play-send" onclick="copyMsg(this.dataset.msg)" data-msg="${esc(d.jogada_estrategica?.mensagem)}">Copiar mensagem</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head"><span class="section-icon">💬</span><span class="section-title">Respostas Diretas</span><span class="section-badge">3 opções</span></div>
-    <div class="section-body">
-      <div class="resp-list">
-        ${(d.respostas||[]).map(r=>`
-        <div class="resp-item">
-          <div class="resp-text">${r}</div>
-          <div class="resp-actions"><button class="resp-btn" onclick="copyMsg(this.dataset.msg)" data-msg="${esc(r)}">Copiar</button></div>
-        </div>`).join('')}
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head"><span class="section-icon">⏱️</span><span class="section-title">Timing</span></div>
-    <div class="section-body">
-      <div class="timing-card">
-        <div class="timing-icon">${timingIcon}</div>
-        <div class="timing-text"><strong>${d.timing}</strong><br>${d.timing_motivo}</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head"><span class="section-icon">🧬</span><span class="section-title">Simular resposta</span></div>
-    <div class="section-body">
-      <div class="sim-row">
-        <input class="sim-input" id="simInput" placeholder="E se eu responder: ...">
-        <button class="sim-btn" onclick="simulate()">Simular ↗</button>
-      </div>
-      <div class="sim-result" id="simResult"></div>
-    </div>
-  </div>`;
-
-  const area = document.getElementById('resultsArea');
-  area.innerHTML = html;
-  area.style.display = 'flex';
+  <div class="section"><div class="section-head"><span class="section-icon">🔎</span><span class="section-title">Diagnóstico</span></div><div class="section-body"><div class="section-text">${d.diagnostico}</div><div class="divider"></div><div style="font-size:11px;color:var(--text3);margin:6px 0 4px">PERFIL DA PESSOA</div><div class="section-text">${d.perfil}</div><div class="profile-tags">${(d.tags_perfil||[]).map(t=>`<span class="ptag">${t}</span>`).join('')}</div><div class="risk-bar-wrap"><div class="risk-label-row"><span>Nível de risco</span><span>${d.risco}</span></div><div class="risk-bar"><div class="risk-fill" style="width:${riskPct};background:${riskFill}"></div></div></div></div></div>
+  <div class="section"><div class="section-head"><span class="section-icon">🔮</span><span class="section-title">Previsão</span></div><div class="section-body"><div class="section-text">${d.previsao}</div><div style="margin-top:8px;display:flex;flex-direction:column;gap:5px">${(d.cenarios||[]).map((c,i)=>`<div style="display:flex;gap:7px;font-size:12px;color:var(--text2)"><span style="color:var(--text3);font-size:10px;margin-top:2px;flex-shrink:0">0${i+1}</span><span>${c}</span></div>`).join('')}</div></div></div>
+  <div class="section"><div class="section-head"><span class="section-icon">♟️</span><span class="section-title">Jogadas</span></div><div class="section-body" style="padding-bottom:12px"><div class="play-grid"><div class="play-card safe"><div class="play-type">Segura</div><div class="play-name">${d.jogada_segura?.nome||'Segura'}</div><div class="play-desc">${d.jogada_segura?.descricao||''}</div><button class="play-copy" onclick="copyMsg(this.dataset.msg)" data-msg="${esc(d.jogada_segura?.mensagem)}">Copiar mensagem</button></div><div class="play-card bold-play"><div class="play-type">Ousada</div><div class="play-name">${d.jogada_ousada?.nome||'Ousada'}</div><div class="play-desc">${d.jogada_ousada?.descricao||''}</div><button class="play-copy" onclick="copyMsg(this.dataset.msg)" data-msg="${esc(d.jogada_ousada?.mensagem)}">Copiar mensagem</button></div><div class="play-card strategic"><div class="play-type">Estratégica</div><div class="play-name">${d.jogada_estrategica?.nome||'Estratégica'}</div><div class="play-desc">${d.jogada_estrategica?.descricao||''}</div><button class="play-copy" onclick="copyMsg(this.dataset.msg)" data-msg="${esc(d.jogada_estrategica?.mensagem)}">Copiar mensagem</button></div></div></div></div>
+  <div class="section"><div class="section-head"><span class="section-icon">💬</span><span class="section-title">Respostas Diretas</span><span class="section-badge">3 opções</span></div><div class="section-body"><div class="resp-list">${(d.respostas||[]).map(r=>`<div class="resp-item"><div class="resp-text">${r}</div><button class="resp-copy" onclick="copyMsg(this.dataset.msg)" data-msg="${esc(r)}">Copiar</button></div>`).join('')}</div></div></div>
+  <div class="section"><div class="section-head"><span class="section-icon">⏱️</span><span class="section-title">Timing</span></div><div class="section-body"><div class="timing-card"><div class="timing-icon">${timingIcon}</div><div class="timing-text"><strong>${d.timing}</strong><br>${d.timing_motivo}</div></div></div></div>
+  <div class="section"><div class="section-head"><span class="section-icon">🧬</span><span class="section-title">Simular resposta</span></div><div class="section-body"><div class="sim-row"><input class="sim-input" id="simInput" placeholder="E se eu responder: ..."><button class="sim-btn" onclick="simulate()">Simular ↗</button></div><div class="sim-result" id="simResult"></div></div></div>`;
+  const area=document.getElementById('resultsArea');
+  area.innerHTML=html;
+  area.style.display='flex';
 }
 
-async function simulate() {
-  const inp = document.getElementById('simInput').value.trim();
-  if (!inp) { toast('Digite uma mensagem para simular'); return; }
-  if (!analysisData) { toast('Faça uma análise primeiro'); return; }
-
-  const res = document.getElementById('simResult');
-  res.style.display = 'block';
-  res.textContent = 'Simulando...';
-
-  const conv = document.getElementById('convInput').value;
-  const prompt = `Dado este contexto de conversa:\n${conv}\n\nPerfil da outra pessoa: ${analysisData.perfil}\n\nSe o usuário enviar: "${inp}"\n\nComo a outra pessoa provavelmente responderia? Simule 1 resposta realista e explique o porquê em 1 frase.\nFormato:\nResposta provável: [mensagem]\n\nPorquê: [explicação]`;
-
-  try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 300,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    const d = await r.json();
-    res.textContent = d.content[0].text;
-  } catch(e) {
-    res.textContent = 'Erro na simulação. Tente novamente.';
-  }
+async function simulate(){
+  const inp=document.getElementById('simInput').value.trim();
+  if(!inp){toast('Digite uma mensagem');return;}
+  if(!analysisData){toast('Faça uma análise primeiro');return;}
+  const res=document.getElementById('simResult');
+  res.style.display='block';res.textContent='Simulando...';
+  const conv=document.getElementById('convInput').value;
+  const prompt=`Contexto: ${conv}\nPerfil: ${analysisData.perfil}\nSe o usuário enviar: "${inp}"\nSimule 1 resposta realista.\nFormato:\nResposta provável: [mensagem]\n\nPorquê: [explicação]`;
+  try{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
+    const data=await r.json();
+    res.textContent=data.candidates[0].content.parts[0].text;
+  }catch(e){res.textContent='Erro na simulação.';}
 }
 </script>
 </body>
